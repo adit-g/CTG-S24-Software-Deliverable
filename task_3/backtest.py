@@ -13,7 +13,7 @@ class BacktestStrategy:
         top_5_returns = []
         even_returns = []
 
-        for date, row in self.factors.iterrows():
+        for date, row in self.factors[1:].iterrows():
             sorted_tickers = row.sort_values(ascending=False)
             top_5_tickers = sorted_tickers.nlargest(5).index
 
@@ -30,8 +30,10 @@ class BacktestStrategy:
     def _ticker_return(self, ticker, date):
         # Calculate return for a single ticker
         try:
-            daily_data = self.data[ticker].loc[date]
-            return daily_data['Close'] / daily_data['Open'] - 1
+            yest_date = self.factors.index[self.factors.index.get_loc(date) - 1]
+            yest_close = self.data[ticker].loc[yest_date]['Close']
+            today_close = self.data[ticker].loc[date]['Close']
+            return today_close / yest_close - 1
         except KeyError:
             return 0  # Return zero if data is missing
 

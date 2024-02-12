@@ -12,8 +12,6 @@ df = pd.read_csv(csv_path, index_col="Date")
 top_5_stocks = df.apply(lambda x: x.nlargest(1).index.tolist(), axis=1)
 stock_counts = pd.Series([stock for stocks in top_5_stocks for stock in stocks]).value_counts()
 
-stock_counts = pd.Series([stock for stocks in top_5_stocks for stock in stocks]).value_counts()
-
 # Code to create a bar chart
 plt.figure(figsize=(10, 6))
 plt.bar(stock_counts.index, stock_counts.values)
